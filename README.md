@@ -2,3 +2,9 @@
 
 An Elixir application to simulate a stock-exchange for booze through Elixir actor model. 
 
+
+To run the simulation:
+
+```
+mix run --no-halt
+```
