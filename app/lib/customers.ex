@@ -16,21 +16,32 @@ defmodule App.Customers do
 
   @impl true
   def handle_info(:buy_cocktail, state) do
+    # IO.inspect(%{key: "value"}, syntax_colors: [atom: :red, string: :green])
+
     cocktail =
       App.Bar.get_cocktails()
-      |> IO.inspect(label: "updated list of cocktails")
+      |> IO.inspect(label: IO.ANSI.format([:blue, "updated list"]), syntax_colors: [atom: :red, string: :green])
       |> Map.keys()
       |> Enum.random()
 
     App.Bar.buy_cocktail(cocktail)
-    IO.puts("customer #{state.name} bought #{cocktail}")
+    IO.puts(IO.ANSI.format([:yellow, "customer #{state.name} bought #{cocktail}"]))
+    update_state = update(state, cocktail)
     schedule_cocktail_purchase()
-    {:noreply, state}
+    IO.inspect(update_state, label: IO.ANSI.format([:blue, "customers"]), syntax_colors: [atom: :red, string: :green])
+    {:noreply, update_state}
+  end
+
+  defp update(%{name: _name, cocktails: cocktails} = customer, cocktail) do
+    %{customer | cocktails: [ cocktail | cocktails ] }
+  end
+
+  defp update(%{name: _name} = customer, cocktail) do
+    Map.put(customer, :cocktails, [cocktail])
   end
 
   defp schedule_cocktail_purchase() do
-    # Random interval between 1 and 5 seconds
-    interval = :rand.uniform(65_000)
+    interval = :rand.uniform(25_000)
     Process.send_after(self(), :buy_cocktail, interval)
   end
 end

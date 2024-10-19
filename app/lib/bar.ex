@@ -96,7 +96,6 @@ defmodule App.Bar do
   end
 
   defp update(target_name, {name, %{price: price, creation_date: creation_date}}) when target_name == name do
-    IO.inspect(name, label: "Bought")
     {name, %{last_bought: DateTime.utc_now(), price: price + 0.01, creation_date: creation_date}}
   end
 
@@ -105,7 +104,6 @@ defmodule App.Bar do
          {name,
           %{price: price, creation_date: _creation_date, last_bought: last_bought} = cocktail}
        ) when not is_nil(last_bought) do
-    IO.inspect({name, cocktail}, label: "this was not bought")
     if DateTime.diff(last_bought, DateTime.utc_now(), :second) < -10 do
       {name, %{cocktail | price: price - 0.01}}
     else
@@ -117,7 +115,6 @@ defmodule App.Bar do
          _target_name,
          {name, %{price: price, creation_date: creation_date} = cocktail}
        ) do
-    IO.inspect({name, cocktail}, label: "this was never bought")
     if DateTime.diff(creation_date, DateTime.utc_now(), :second) < -30 do
       {name, %{cocktail | price: price - 0.10}}
     else
