@@ -6,5 +6,6 @@ An Elixir application to simulate a stock-exchange for booze through Elixir acto
 To run the simulation:
 
 ```
+cd app
 mix run --no-halt
 ```
